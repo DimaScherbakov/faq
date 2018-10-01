@@ -1,0 +1,58 @@
+ng new angular-tour-of-heroes		--создать проект
+
+ng serve --open		--Команда ng serve соберет приложение, и запистит сервер в режиме разработки
+			Флаг —open откроет приложение в браузере по адресу http://localhost:4200/
+
+src/app:
+    app.component.ts — класс компонента написанный на TypeScript.
+    app.component.html — файл шаблона HTML.
+    app.component.css — файл содержащий приватные стили компонента.
+
+ng generate component heroes		--CLI создаст новую папку  src/app/heroes/ и сгенерирует 3 файла HeroesComponent.
+
+
+Import/Export работает так :
+
+	import { Hero } from '../hero';
+	
+	export class Hero {
+	id: number;
+	 name: string;
+	}
+
+Двусторонее связывание:
+
+в component.html:
+
+<input [(ngModel)]="hero.name" placeholder="name">
+
+[(ngModel)] — синтаксис двустороннего связывания данных в Angular
+
+в src/app/app.module.ts:
+import { FormsModule } from '@angular/forms'; // <-- NgModel lives here
+	
+imports: [
+  BrowserModule,
+  FormsModule
+],
+
+
+Цикл в Angular:
+*ngFor — деректива повторения Angular. Он повторяет элемент хоста для каждого элемента в списке.
+в component.html
+
+<h2>My Heroes</h2>
+<ul class="heroes">
+  <li *ngFor="let hero of heroes">
+    <span class="badge">{{hero.id}}</span> {{hero.name}}
+  </li>
+</ul>
+
+декратор @Input
+в component.ts
+import { Component, OnInit, Input } from '@angular/core';
+@Input() hero: Hero;	-- Ключевой особенностью таких входных свойств является то,
+			   что они могут устанавливаться извне, например, из главного компонента.
+
+Назначение св-в с помощью class
+<div [class.active]="condition"></div>		--Когда condition возвращает true, добавляется класс active. Когда false, active удаляется
