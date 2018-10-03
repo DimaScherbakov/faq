@@ -1,0 +1,49 @@
+На сервере должно быть реализовано что-то вроде:(пример для angular 6)
+app.use(function (req, res, next) {
+        res.header("Access-Control-Allow-Origin", "http://127.0.0.1:4200");
+        res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS$
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, C$
+        next();});
+
+
+/app.model.ts
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
+
+@NgModule({
+  imports: [
+    BrowserModule,
+    HttpClientModule
+  ],
+  providers: [HttpClient],
+
+
+ng generate service http
+
+
+/http.service.ts
+
+import { Injectable } from '@angular/core';
+import {HttpClient,HttpHeaders} from '@angular/common/http';
+
+@Injectable()
+export class HttpService {
+
+  constructor(private http: HttpClient) { }
+    getData(){
+        return this.http.get('http://127.0.0.1:8080/'); }
+}
+
+
+/app.component.ts
+
+@Component({
+  providers: [HttpService]
+
+export class AppComponent {
+ answer:any; // variable with answer from server
+ constructor(private httpService: HttpService){
+  this.httpService.getData().subscribe((data: any) => {this.answer=data;},
+                    error => console.log(error));
+}}
+
