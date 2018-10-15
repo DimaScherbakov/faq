@@ -1,0 +1,3 @@
+ Ubuntu stores all the applications shortcuts in /usr/share/applications/
+
+ Applications to autostart are typically located in the /usr/bin folder.
