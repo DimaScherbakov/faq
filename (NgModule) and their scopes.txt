@@ -1,0 +1,39 @@
+https://medium.com/@cyrilletuzi/understanding-angular-modules-ngmodule-and-their-scopes-81e4ed6f7407
+Understanding Angular modules (NgModule) and their scopes
+
+The purpose of a NgModule is to declare each thing you create in Angular, and group them together
+
+“declarations” is for things you’ll use in your templates: mainly components 
+	(~ views: the classes displaying data), but also directives and pipes,
+“providers” is for services (~ models: the classes getting and handling data).
+
+NgModule and scopes / visibility
+	declarations / components are in local scope (private visibility),
+	providers / services are (generally) in global scope (public visibility).
+
+How many times you need to import modules
+	Modules to import each time you need them
+		CommonModule ( bindings, *ngIf, *ngFor…), except in the first app module, because it’s part of the BrowserModule
+		FormsModule / ReactiveFormsModule
+		MatXModule and other UI modules
+	Modules to import only once
+		HttpClientModule
+		BrowserAnimationsModule or NoopAnimationsModule
+		any other module providing you services only.
+
+For the AppModule, it does:
+	RouterModule.forRoot(routes)
+For submodules, it does:
+	RouterModule.forChild(routes)
+Because the first time in app module, forRoot() will give the router components and provide the router services(ActivatedRoute). 
+forChild will only give the router components
+
+Lazy-loaded modules
+const routes: Routes = [
+  { path: 'admin', loadChildren: './admin/admin.module#AdminModule' }
+];
+it’s not included in the global scope of your app.
+For components, it doesn’t change anything: you need to import again the CommonModule and other
+For services:
+	you’ll still have access to services already provided in the app (like HttpClient)
+	but the services provided in your lazy-loaded module will only be available in this lazy-loaded module, not everywhere in your app.
