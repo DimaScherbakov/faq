@@ -1,0 +1,50 @@
+https://medium.com/@cyrilletuzi/architecture-in-angular-projects-242606567e40
+Architecture in Angular projects
+
+Architecture for Angular apps
+	consistency: simplicity (for small apps) and scalability (for big apps),
+	reusability in different projects,
+	optimization (consistent with or without lazy-loading),
+	testability.
+
+Main types of NgModules
+	modules of pages,
+	modules of global services,
+	modules of reusable components.
+
+Modules of pages
+	modules with routing
+	organize the different areas of your application
+	loaded only once, either in the AppModule or via lazy-loading
+	
+	These modules contain 3 things:
+		/shared: services and interfaces ( you need data first. Here come services)
+			AccountModule as an example.
+			 The account service should just manage communication with the API
+			 (which says “yes” or “no” based on user credentials).
+			 The user connection status should not be stored here,
+			 because it may be not available elsewhere in the app.
+			 It will be managed by a module of global services.
+		/pages: routed components
+			Each page component is associated to a route.
+			data should be transferred to a child component via an attribute
+		/components: pure presentation components.
+			just retrieves the transferred data with the Input decorator, 
+			 and displays it in the template.
+
+	why is this important?
+		reusability: presentation components can be reused in different pages,
+		optimizability: change detection of presentation components can be optimized,
+		testability: unit tests are possible on presentation components
+
+Modules of global services
+	modules with services you need through the whole app
+	loaded only once in the AppModule
+
+Modules of reusable components should not rely on a service,
+ because services are often specific to a particular app.
+	Private services
+		Services inside UI modules can be relevant for data manipulation. 
+	 	 But then, be sure to provide them in the component, so they have a local/private scope,
+	 	 and certainly not in the NgModule.
+
