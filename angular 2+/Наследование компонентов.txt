@@ -1,0 +1,115 @@
+https://blog.bitsrc.io/component-inheritance-in-angular-acd1215d5dd8
+Component Inheritance in Angular
+
+Tip: To keep your code DRY, Make your components reusable with Bit [https://github.com/teambit/bit]
+
+The baseComponent will look like this:
+@Component({
+    selector: 'app-base',
+    template: `
+        <div>
+            base works!!
+        </div>
+    `
+})
+export class BaseComponent {
+	baseItems: Array<any> = []
+	apiName: string;	//  Each child component has different APIs from which they fetch their data.
+
+	ngOnInit() {					//  Fetch and load the data to the baseItems.
+        this.apiService[apiName].subscribe(res=>{	//  All components will get their data regardless of the type.
+            this.baseItems = res.data
+        })
+    }
+}
+
+- The UI will not be shown so there is no need of the <div> base works!! </div>
+
+What the inheriting components need only to do is just reference the base items and render the items.
+@Component({
+    selecor: 'app-user',
+    tempate: `
+        <h1>Manage Users</h1>
+        <search (search)="searchCallback()"></search>
+        <table>
+            <th>
+                <tr>#</tr>
+                <tr>Name</tr>
+                <tr>Email</tr>
+                <tr>Action</tr>
+            </th>
+            <tb *ngFor="let user of baseItems">
+                <tr>{{ user.id }}</tr>
+                <tr>{{ user.name }}</tr>
+                <tr>
+                    <button (click)="editUser(user)">Edit</button>
+                    <button (click)="deleteUser(user)">Delete</button>
+                </tr>
+            </tb>
+        </table>
+        <paginate (next)="calcPage('next')" (prev)="calcPage('prev')"></paginate>
+    `
+})
+export Users extends BaseComponent {
+    //...
+    apiName = 'getUsers'
+}
+
+-Lifecycle methods(OnInit, OnChanges, …) are not inherited.
+-If we need to fire ngOnInit on ComponentA in ComponentB
+	we need to define the OnInit method on ComponentB and
+	call the parent method using super.* call.
+
+@Component({
+})
+class ComponentA implements OnInit{
+    ngOnInit() {
+        console.log('ComponentA ngOnInit')
+        //...
+    }
+}
+@Component({...})
+class ComponentB extends ComponentA implements OnInit {
+    ngOnInit() {
+        super.ngOnInit() // ComponentA's method is fired
+        console.log('ComponentB ngOnInit')
+        // ...
+    }
+}
+
+-private methods and properties are not passed over to child components. 
+	Only public methods and properties are inherited by child components.
+- Metadata and Decorators(@Component, @Directive, @NgModule, ...) are not inherited
+For example:
+...
+class ComponentB extends ComponentA {}
+-  when ComponentB is rendered app-b, the template in the ComponentA is not rendered.
+-  But there is an exception, @Input and @Output decorators are passed down to the child components.
+...
+class ComponentA {
+    @Input() input;
+    @Output() output: EventEmitter<any> = new EventEmitter();
+}
+...
+class ComponentB extends ComponentA {
+    runClick() {
+        this.output.emit()
+    }
+}
+
+-  Dependency Injection
+If we have our base component like this:
+@Component({...})
+class App {
+    constructor(private router: Router) {
+        // ...
+    }
+}
+Let’s say BComponent extends App. BComponent must inject the Router and pass it to super() call.
+@Component({...})
+class BComponent extends App {
+    constructor(public router: Router) {
+        // ...
+        super(router)
+    }
+}
