@@ -1,6 +1,6 @@
 # Scalable Angular Application Architecture
 [source](https://bulldogjob.com/articles/539-scalable-angular-application-architecture)
-####  Architecture principles
+#### Architecture principles
 1. Project structure
     >how to organize you project files, define and work with Angular modules and their dependencies
 2. Data flow architecture
@@ -12,7 +12,7 @@
 - increasing size of data loaded to the application
 - growing complexity and size of the project
 >usually followed by longer loading times.
-###Structure of the application
+### Structure of the application
 - One of the first things you do when you set up a new project is to define the structure of the application, one of them is the module-oriented project structure.
 - A very important element of this approach is isolation of modules.
 >you can delete one of modules from the application, and the rest will work without any problems.
@@ -30,14 +30,14 @@
     > will be reused in other application modules, not applied globally. They can be imported by feature modules.
 
 All remaining modules (so-called feature modules) should be isolated and independent.
-###Lazy Loading
+### Lazy Loading
 It allows to defer the loading of a particular part of the application until it's actually needed 
 >(usually when the user wants to access a particular screen of the application)
 
 <br>![Lazy Loading](../img/content_4.png)<br>
 ```{path: ‘user’, loadChildren: ‘./users/user.module#UserModule’}```
 
-###Data flow
+### Data flow
 In our application we've introduced the idea of "smart" and "dummy" components.
 >The smart components are also called "Containers".
 
@@ -60,20 +60,20 @@ Everything that the  user sees on the screen is a reflection of the state of the
 
 The idea behind Redux is that the whole application state is stored in one single Store, the object that represents the current state of the application. A Store is immutable, it cannot be modified, every time a state needs to be changed, a new object has to be created.
 <br>![](../img/content_9.png)<br>
-####Actions and Reducers
+#### Actions and Reducers
 A Store cannot be accessed and modified directly, use **reducers** for this.
 >simple function that takes an action as an argument
 
 <br>![](../img/content_10.png)<br>
-#####State propagation
+##### State propagation
 One of the most popular  implementation of Redux pattern in Angular is definitely ngrx/store.
 >**Once the modification to the store is applied, all subscribers are notified about the change.**
 
 <br>![](../img/content_11.png)<br>
-#####State services
+##### State services
 Good practice to encapsulate Store operations in dedicated services. Such services can then be reused across the module or application, and our components do not have be aware of the details of state operations.
 <br>![](../img/content_12.png)<br>
-###Combining state management and data flow
+### Combining state management and data flow
 **The patterns described are really powerful.**
 Redux-base state management provides bullet proof synchronization between various parts of the application
 and the idea of an immutable state.
